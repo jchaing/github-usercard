@@ -102,17 +102,14 @@ function makeCard(ghData) {
   followers.textContent = `Followers: ${ghData.followers}`;
   following.textContent = `Following: ${ghData.following}`;
   bio.textContent = `Bio: ${ghData.bio}`;
-  console.log(url);
   return card;
 }
 
 const cards = document.querySelector('.cards');
 
-const makeGithubCard = async ghData => {
+const makeGithubCard = async myData => {
   try {
-    console.log(ghData);
-    let res = await axios.get(ghData);
-    console.log(res.data);
+    let res = await axios.get(myData);
     cards.appendChild(makeCard(res.data));
   } catch (err) {
     console.log(err);
@@ -120,3 +117,18 @@ const makeGithubCard = async ghData => {
 };
 
 makeGithubCard('https://api.github.com/users/jchaing');
+
+const followersGHCard = async followersData => {
+  try {
+    let res = await axios.get(followersData);
+    res.data.forEach(data => {
+      setTimeout(() => {
+        cards.appendChild(makeCard(data));
+      }, 1000);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+followersGHCard('https://api.github.com/users/jchaing/followers');
